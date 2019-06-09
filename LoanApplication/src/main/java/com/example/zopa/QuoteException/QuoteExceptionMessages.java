@@ -13,4 +13,5 @@ public class QuoteExceptionMessages {
     public static final String INCORRECT_AMOUNT = "The amount could not be negative or zero";
     public static final String INCORRECT_RATE_FORMAT = "The RATE could not be negative or zero";
     public static final String INCORRECT_NAME = "Lender name is not exist in the file";
+    public static final String INSUFFICIENT_AMOUNT_QUOTE = "Insufficient Amount to provide a Quote for the requested amount-- Please try another time";
 }

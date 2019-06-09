@@ -120,6 +120,14 @@ public class LoanApplicationTests {
 		System.out.println("--------------");
 	}
 
+	@Test(expected = QuoteException.class)
+	@Category(NegativeCategoryTest.class)
+	public void validateLoanAmountGreaterThanPoolBalance() throws QuoteException {
+		double invalidLaonAmount = 2500.0;
+		loanService.validateBalance(lenders,invalidLaonAmount);
+		System.out.println("--------------");
+	}
+
 	@Test
 	@Category(PositiveCategoryTest.class)
 	public void getvalidRequestAmount() throws QuoteException {

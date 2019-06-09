@@ -1,5 +1,7 @@
 package com.example.zopa.service;
 
+import com.example.zopa.QuoteException.QuoteException;
+import com.example.zopa.QuoteException.QuoteExceptionMessages;
 import com.example.zopa.model.Lender;
 import com.example.zopa.model.Quote;
 
@@ -29,17 +31,21 @@ public class LoanService {
      * @param result
      * @return
      */
-    public Quote getRateAndRepayments(final List<Lender> lendersList, Quote result) {
+    public Quote getRateAndRepayments(final List<Lender> lendersList, Quote result) throws QuoteException {
 
         List<Lender> sortedList = lendersList.stream().sorted(Comparator.comparing(Lender::getRate).thenComparing(Lender::getAvailableAmount)).collect(Collectors.toList());
 
-        result.setTotalPayment(round(calculateTotalRepayment(sortedList, result.getRequestAmount()), 2));
+        if(validateBalance(lendersList,result.getRequestAmount())){
+            result.setTotalPayment(round(calculateTotalRepayment(sortedList, result.getRequestAmount()), 2));
 
-        DecimalFormat df = new DecimalFormat("#.0");
-        String rateFormated = df.format(percentageRate.doubleValue() / count * 100);
-        result.setPercentageRate(Double.valueOf(rateFormated));
+            DecimalFormat df = new DecimalFormat("#.0");
+            String rateFormated = df.format(percentageRate.doubleValue() / count * 100);
+            result.setPercentageRate(Double.valueOf(rateFormated));
 
-        result.setMonthlyPayment(round(BigDecimal.valueOf(result.getTotalPayment()).divide(LOANLENGHT, MathContext.DECIMAL64), 2));
+            result.setMonthlyPayment(round(BigDecimal.valueOf(result.getTotalPayment()).divide(LOANLENGHT, MathContext.DECIMAL64), 2));
+        }
+
+
 
         return result;
     }
@@ -107,5 +113,13 @@ public class LoanService {
         BigDecimal decimalValue = value;
         decimalValue = decimalValue.setScale(places, RoundingMode.HALF_UP);
         return decimalValue.doubleValue();
+    }
+
+    public boolean validateBalance(List<Lender> lenders , double loanAmout) throws QuoteException{
+        double sum = lenders.stream().mapToInt(l -> l.getAvailableAmount()).sum();
+        if(loanAmout> sum){
+            throw new QuoteException(QuoteExceptionMessages.INSUFFICIENT_AMOUNT_QUOTE);
+        }
+        return true;
     }
 }
