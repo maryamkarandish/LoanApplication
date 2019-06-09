@@ -28,8 +28,12 @@
 - The project uses the JDK 8 
 - It is essencial to install Maven before running the project
 - It is tested with Junit 4.11 or higher
+- Copy the quote.exe to a path then Run the project with this command quote.exe [D:\ \path\ \market.csv] 1000
+- _Attention_ : the path should be with ' \ \ ' instead of ' \ '  and it is the path of Market.csv file
+- _Advice_ : to run the application easier we suggested that copy the csv file in the same path of the quote.exe file then it is not needed to enter the path just the name of csv file would be enough 
 
 for more information you can contact:
 --------------------------------------
 maryam.karandish4@gmail.com
 +98 936 769 3346
+
